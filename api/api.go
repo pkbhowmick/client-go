@@ -170,3 +170,7 @@ func CreateStatefulSet() {
 	}
 	fmt.Printf("Created StatefulSet: %q\n", result.GetObjectMeta().GetName())
 }
+
+func CreateReplicaSet() {
+	fmt.Println("Creating replicaset...")
+}
