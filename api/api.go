@@ -209,3 +209,7 @@ func CreateReplicaSet() {
 	}
 	fmt.Printf("Created ReplicaSet %q\n", result.GetObjectMeta().GetName())
 }
+
+func CreateDaemonSet() {
+	fmt.Println("Creating DaemonSet ...")
+}
