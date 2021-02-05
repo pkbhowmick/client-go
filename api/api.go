@@ -291,3 +291,7 @@ func CreateDaemonSet() {
 	}
 	fmt.Printf("Created Daemonset %q\n", result.GetObjectMeta().GetName())
 }
+
+func CreateJob() {
+	fmt.Println("Creating Job . . .")
+}
