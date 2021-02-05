@@ -10,7 +10,7 @@ func init() {
 }
 
 var createCmd = &cobra.Command{
-	Use:   "create-dpl",
+	Use:   "create-deploy",
 	Short: "This command is for creating deployment",
 	Long:  "This command is used for creating deployment object using kubernetes API",
 	Run: func(cmd *cobra.Command, args []string) {
