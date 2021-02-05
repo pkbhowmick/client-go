@@ -20,7 +20,7 @@ func int32Ptr(i int32) *int32 {
 	return &i
 }
 
-func CreateDeployment() {
+func CreateClientSet() kubernetes.Interface {
 	var kubeconfig *string
 	if home := homedir.HomeDir(); home != "" {
 		// fmt.Println(home)
@@ -29,16 +29,21 @@ func CreateDeployment() {
 		kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
 	}
 	fmt.Println(*kubeconfig)
-	fmt.Println("Creating deployment")
 	flag.Parse()
 	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
 	if err != nil {
 		panic(err)
 	}
-	clientset, err := kubernetes.NewForConfig(config)
+	var clientset kubernetes.Interface
+	clientset, err = kubernetes.NewForConfig(config)
 	if err != nil {
 		panic(err)
 	}
+	return clientset
+}
+
+func CreateDeployment() {
+	clientset := CreateClientSet()
 	deploymentsClient := clientset.AppsV1().Deployments(apiv1.NamespaceDefault)
 
 	deployment := &appsv1.Deployment{
@@ -83,4 +88,8 @@ func CreateDeployment() {
 		panic(err)
 	}
 	fmt.Printf("Created deployment %q\n", result.GetObjectMeta().GetName())
+}
+
+func CreateStatefulSet() {
+	fmt.Println("Create statefulset cmd is ok")
 }

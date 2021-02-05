@@ -1,18 +1,18 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
 	"github.com/pkbhowmick/client-go/api"
+	"github.com/spf13/cobra"
 )
 
-func init()  {
+func init() {
 	rootCmd.AddCommand(createCmd)
 }
 
 var createCmd = &cobra.Command{
-	Use: "create",
+	Use:   "create-dpl",
 	Short: "This command is for creating deployment",
-	Long: "This command is used for creating deployment object using kubernetes API",
+	Long:  "This command is used for creating deployment object using kubernetes API",
 	Run: func(cmd *cobra.Command, args []string) {
 		api.CreateDeployment()
 	},
