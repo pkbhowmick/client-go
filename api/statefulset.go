@@ -12,6 +12,12 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+var stsName string
+
+func SetStsName(sts string) {
+	stsName = sts
+}
+
 func CreateStatefulSet() {
 	fmt.Println("Create statefulset cmd is ok")
 	clientset := CreateClientSet()
@@ -96,4 +102,16 @@ func ListStatefulSet() {
 	for _, item := range list.Items {
 		fmt.Printf("---> %s (%d replicas)\n", item.Name, *item.Spec.Replicas)
 	}
+}
+
+func DeleteStatefulSet() {
+	fmt.Printf("Deleteing StatefulSet: %q\n", stsName)
+	clientset := CreateClientSet()
+	stsClient := clientset.AppsV1().StatefulSets(apiv1.NamespaceDefault)
+	err := stsClient.Delete(context.TODO(), stsName, metav1.DeleteOptions{})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("%q successfully deleted\n", stsName)
 }

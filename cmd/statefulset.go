@@ -5,9 +5,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var stsName string
+
 func init() {
 	rootCmd.AddCommand(createStsCmd)
 	rootCmd.AddCommand(listStsCmd)
+	rootCmd.AddCommand(deleteStsCmd)
+	deleteStsCmd.PersistentFlags().StringVarP(&stsName, "name", "n", "", "This flag sets StatefulSet name to be deleted")
 }
 
 var createStsCmd = &cobra.Command{
@@ -25,5 +29,15 @@ var listStsCmd = &cobra.Command{
 	Long:  "",
 	Run: func(cmd *cobra.Command, args []string) {
 		api.ListStatefulSet()
+	},
+}
+
+var deleteStsCmd = &cobra.Command{
+	Use:   "delete-sts",
+	Short: "",
+	Long:  "",
+	Run: func(cmd *cobra.Command, args []string) {
+		api.SetStsName(stsName)
+		api.DeleteStatefulSet()
 	},
 }
