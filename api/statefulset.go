@@ -48,7 +48,7 @@ func CreateStatefulSet() {
 							VolumeMounts: []apiv1.VolumeMount{
 								{
 									Name:      "mongo-vol",
-									MountPath: "/db/data",
+									MountPath: "/data/db",
 								},
 							},
 						},
@@ -82,4 +82,18 @@ func CreateStatefulSet() {
 		return
 	}
 	fmt.Printf("Created StatefulSet: %q\n", result.GetObjectMeta().GetName())
+}
+
+func ListStatefulSet() {
+	fmt.Println("***** Listing all StatefulSets *****")
+	clientset := CreateClientSet()
+	stsClient := clientset.AppsV1().StatefulSets(apiv1.NamespaceDefault)
+	list, err := stsClient.List(context.TODO(), metav1.ListOptions{})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for _, item := range list.Items {
+		fmt.Printf("---> %s (%d replicas)\n", item.Name, *item.Spec.Replicas)
+	}
 }

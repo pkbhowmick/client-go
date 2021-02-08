@@ -7,6 +7,7 @@ import (
 
 func init() {
 	rootCmd.AddCommand(createStsCmd)
+	rootCmd.AddCommand(listStsCmd)
 }
 
 var createStsCmd = &cobra.Command{
@@ -15,5 +16,14 @@ var createStsCmd = &cobra.Command{
 	Long:  "This command is used for updating current deployment using kubernetes API",
 	Run: func(cmd *cobra.Command, args []string) {
 		api.CreateStatefulSet()
+	},
+}
+
+var listStsCmd = &cobra.Command{
+	Use:   "list-sts",
+	Short: "",
+	Long:  "",
+	Run: func(cmd *cobra.Command, args []string) {
+		api.ListStatefulSet()
 	},
 }
