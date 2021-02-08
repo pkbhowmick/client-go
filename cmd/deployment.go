@@ -6,12 +6,17 @@ import (
 )
 
 var deploymentName string
+var replicas int
 
 func init() {
 	rootCmd.AddCommand(createCmd)
 	rootCmd.AddCommand(getDeployCmd)
 	rootCmd.AddCommand(deleteDeployCmd)
+	rootCmd.AddCommand(updateDeployCmd)
 	deleteDeployCmd.PersistentFlags().StringVarP(&deploymentName, "name", "n", "go-api-server", "This flag sets the name of the deployment to be deleted")
+	updateDeployCmd.PersistentFlags().IntVarP(&replicas, "replicas", "r", 1, "This flag sets the number of replicas")
+	updateDeployCmd.PersistentFlags().StringVarP(&deploymentName, "name", "n", "go-api-server", "This flag sets the name of the deployment to be deleted")
+
 }
 
 var createCmd = &cobra.Command{
@@ -39,5 +44,16 @@ var deleteDeployCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		api.SetDeploymentName(deploymentName)
 		api.DeleteDeployment()
+	},
+}
+
+var updateDeployCmd = &cobra.Command{
+	Use:   "update-deploy",
+	Short: "This command updates the number of replicas of the given deployment",
+	Long:  "This command updates the number of replicas of the given deployment using kubernetes API",
+	Run: func(cmd *cobra.Command, args []string) {
+		api.SetDeploymentName(deploymentName)
+		api.SetReplicas(replicas)
+		api.UpdateDeployment()
 	},
 }

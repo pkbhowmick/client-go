@@ -122,6 +122,12 @@ func SetDeploymentName(name string) {
 	deploymentName = name
 }
 
+var replicas int
+
+func SetReplicas(rep int) {
+	replicas = rep
+}
+
 func DeleteDeployment() {
 	fmt.Printf("Deleting deployment : %s \n", deploymentName)
 	clientset := CreateClientSet()
@@ -132,6 +138,10 @@ func DeleteDeployment() {
 		return
 	}
 	fmt.Printf("%s deleted successfully.\n", deploymentName)
+}
+
+func UpdateDeployment() {
+	fmt.Printf("Scaling Deployment -> %s replicas to -> %d\n", deploymentName, replicas)
 }
 
 func CreateStatefulSet() {
