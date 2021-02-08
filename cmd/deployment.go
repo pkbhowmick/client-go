@@ -6,7 +6,7 @@ import (
 )
 
 var deploymentName string
-var replicas int
+var replicas int32
 
 func init() {
 	rootCmd.AddCommand(createCmd)
@@ -14,7 +14,7 @@ func init() {
 	rootCmd.AddCommand(deleteDeployCmd)
 	rootCmd.AddCommand(updateDeployCmd)
 	deleteDeployCmd.PersistentFlags().StringVarP(&deploymentName, "name", "n", "go-api-server", "This flag sets the name of the deployment to be deleted")
-	updateDeployCmd.PersistentFlags().IntVarP(&replicas, "replicas", "r", 1, "This flag sets the number of replicas")
+	updateDeployCmd.PersistentFlags().Int32VarP(&replicas, "replicas", "r", 1, "This flag sets the number of replicas")
 	updateDeployCmd.PersistentFlags().StringVarP(&deploymentName, "name", "n", "go-api-server", "This flag sets the name of the deployment to be deleted")
 
 }

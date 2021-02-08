@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"k8s.io/client-go/util/retry"
+
 	appsv1 "k8s.io/api/apps/v1"
 
 	apiv1 "k8s.io/api/core/v1"
@@ -12,10 +14,14 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-var stsName string
+var stsName, image string
 
 func SetStsName(sts string) {
 	stsName = sts
+}
+
+func SetImage(img string) {
+	image = img
 }
 
 func CreateStatefulSet() {
@@ -114,4 +120,24 @@ func DeleteStatefulSet() {
 		return
 	}
 	fmt.Printf("%q successfully deleted\n", stsName)
+}
+
+func UpdateStatefulSet() {
+	fmt.Printf("Updating StatefulSet %q replicas to %d\n", stsName, replicas)
+	clientset := CreateClientSet()
+	stsClient := clientset.AppsV1().StatefulSets(apiv1.NamespaceDefault)
+	retryErr := retry.RetryOnConflict(retry.DefaultRetry, func() error {
+		result, getErr := stsClient.Get(context.TODO(), stsName, metav1.GetOptions{})
+		if getErr != nil {
+			panic(fmt.Errorf("Failed to get latest version of StatefulSet: %v", getErr))
+		}
+		result.Spec.Replicas = int32Ptr(replicas)
+		result.Spec.Template.Spec.Containers[0].Image = image
+		_, updateErr := stsClient.Update(context.TODO(), result, metav1.UpdateOptions{})
+		return updateErr
+	})
+	if retryErr != nil {
+		panic(fmt.Errorf("Update failed: %v", retryErr))
+	}
+	fmt.Printf("Statefulset %q Successfully updated\n", stsName)
 }

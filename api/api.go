@@ -29,9 +29,9 @@ func SetDeploymentName(name string) {
 	deploymentName = name
 }
 
-var replicas int
+var replicas int32
 
-func SetReplicas(rep int) {
+func SetReplicas(rep int32) {
 	replicas = rep
 }
 
