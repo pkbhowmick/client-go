@@ -39,7 +39,7 @@ func CreateClientSet() kubernetes.Interface {
 	} else {
 		kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
 	}
-	fmt.Println(*kubeconfig)
+	//fmt.Println(*kubeconfig)
 	flag.Parse()
 	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
 	if err != nil {
@@ -103,6 +103,15 @@ func CreateDeployment() {
 
 func GetDeployment() {
 	fmt.Println("Listing all deployment objects ...")
+	clientset := CreateClientSet()
+	deploymentClient := clientset.AppsV1().Deployments(apiv1.NamespaceDefault)
+	list, err := deploymentClient.List(context.TODO(), metav1.ListOptions{})
+	if err != nil {
+		panic(err)
+	}
+	for _, item := range list.Items {
+		fmt.Printf("%s (%d replicas)\n", item.Name, *item.Spec.Replicas)
+	}
 }
 
 func CreateStatefulSet() {
