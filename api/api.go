@@ -114,6 +114,24 @@ func GetDeployment() {
 	}
 }
 
+var deploymentName string
+
+func SetDeploymentName(name string) {
+	deploymentName = name
+}
+
+func DeleteDeployment() {
+	fmt.Printf("Deleting deployment : %s \n", deploymentName)
+	clientset := CreateClientSet()
+	deploymentClient := clientset.AppsV1().Deployments(apiv1.NamespaceDefault)
+	err := deploymentClient.Delete(context.TODO(), deploymentName, metav1.DeleteOptions{})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("%s deleted successfully.\n", deploymentName)
+}
+
 func CreateStatefulSet() {
 	fmt.Println("Create statefulset cmd is ok")
 	clientset := CreateClientSet()

@@ -5,9 +5,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var deploymentName string
+
 func init() {
 	rootCmd.AddCommand(createCmd)
 	rootCmd.AddCommand(getDeployCmd)
+	rootCmd.AddCommand(deleteDeployCmd)
+	deleteDeployCmd.PersistentFlags().StringVarP(&deploymentName, "name", "n", "go-api-server", "This flag sets the name of the deployment to be deleted")
 }
 
 var createCmd = &cobra.Command{
@@ -25,5 +29,15 @@ var getDeployCmd = &cobra.Command{
 	Long:  "This command will list all deployment resources that are running on",
 	Run: func(cmd *cobra.Command, args []string) {
 		api.GetDeployment()
+	},
+}
+
+var deleteDeployCmd = &cobra.Command{
+	Use:   "delete-deploy",
+	Short: "",
+	Long:  "",
+	Run: func(cmd *cobra.Command, args []string) {
+		api.SetDeploymentName(deploymentName)
+		api.DeleteDeployment()
 	},
 }
