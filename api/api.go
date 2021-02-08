@@ -101,6 +101,10 @@ func CreateDeployment() {
 	fmt.Printf("Created deployment %q\n", result.GetObjectMeta().GetName())
 }
 
+func GetDeployment() {
+	fmt.Println("Listing all deployment objects ...")
+}
+
 func CreateStatefulSet() {
 	fmt.Println("Create statefulset cmd is ok")
 	clientset := CreateClientSet()
