@@ -96,7 +96,8 @@ func CreateDeployment() {
 	fmt.Println("Creating deployment...")
 	result, err := deploymentsClient.Create(context.TODO(), deployment, metav1.CreateOptions{})
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 	fmt.Printf("Created deployment %q\n", result.GetObjectMeta().GetName())
 }
@@ -107,7 +108,8 @@ func GetDeployment() {
 	deploymentClient := clientset.AppsV1().Deployments(apiv1.NamespaceDefault)
 	list, err := deploymentClient.List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 	for _, item := range list.Items {
 		fmt.Printf("%s (%d replicas)\n", item.Name, *item.Spec.Replicas)
@@ -198,7 +200,8 @@ func CreateStatefulSet() {
 	fmt.Println("Creating StatefulSet...")
 	result, err := stsClient.Create(context.TODO(), statefulSet, metav1.CreateOptions{})
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 	fmt.Printf("Created StatefulSet: %q\n", result.GetObjectMeta().GetName())
 }
@@ -237,7 +240,8 @@ func CreateReplicaSet() {
 	}
 	result, err := replicaSetClient.Create(context.TODO(), replicaSet, metav1.CreateOptions{})
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 	fmt.Printf("Created ReplicaSet %q\n", result.GetObjectMeta().GetName())
 }
@@ -319,7 +323,8 @@ func CreateDaemonSet() {
 	}
 	result, err := daemonSetClient.Create(context.TODO(), daemonSet, metav1.CreateOptions{})
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 	fmt.Printf("Created Daemonset %q\n", result.GetObjectMeta().GetName())
 }
@@ -350,7 +355,8 @@ func CreateJob() {
 	}
 	result, err := jobClient.Create(context.TODO(), job, metav1.CreateOptions{})
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 	fmt.Printf("Created Job %q\n", result.GetObjectMeta().GetName())
 }
