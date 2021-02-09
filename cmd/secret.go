@@ -5,8 +5,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var secretName string
+
 func init() {
 	rootCmd.AddCommand(createSecretCmd)
+	rootCmd.AddCommand(deleteSecretCmd)
+	deleteSecretCmd.PersistentFlags().StringVarP(&secretName, "name", "n", "mongo-secret", "Delete given secret name")
 }
 
 var createSecretCmd = &cobra.Command{
@@ -15,5 +19,15 @@ var createSecretCmd = &cobra.Command{
 	Long:  "Create a secret of type Opaque in default namespace. It creates username & password secret data",
 	Run: func(cmd *cobra.Command, args []string) {
 		api.CreateSecret()
+	},
+}
+
+var deleteSecretCmd = &cobra.Command{
+	Use:   "delete-secret",
+	Short: "Delete the given secret object",
+	Long:  "Delete the given secret object of",
+	Run: func(cmd *cobra.Command, args []string) {
+		api.SetSecretName(secretName)
+		api.DeleteSecret()
 	},
 }

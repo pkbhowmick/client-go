@@ -8,6 +8,12 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+var secretName string
+
+func SetSecretName(secret string) {
+	secretName = secret
+}
+
 func CreateSecret() {
 	clientset := CreateClientSet()
 	secretClient := clientset.CoreV1().Secrets(apiv1.NamespaceDefault)
@@ -27,4 +33,15 @@ func CreateSecret() {
 		return
 	}
 	fmt.Printf("Secret %q created\n", result.GetObjectMeta().GetName())
+}
+
+func DeleteSecret() {
+	clientset := CreateClientSet()
+	secretClient := clientset.CoreV1().Secrets(apiv1.NamespaceDefault)
+	err := secretClient.Delete(context.TODO(), secretName, metav1.DeleteOptions{})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("Secret %q deleted\n", secretName)
 }
