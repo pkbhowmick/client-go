@@ -10,7 +10,6 @@ var secretName string
 func init() {
 	rootCmd.AddCommand(createSecretCmd)
 	rootCmd.AddCommand(deleteSecretCmd)
-	deleteSecretCmd.PersistentFlags().StringVarP(&secretName, "name", "n", "mongo-secret", "Delete given secret name")
 }
 
 var createSecretCmd = &cobra.Command{
@@ -27,7 +26,6 @@ var deleteSecretCmd = &cobra.Command{
 	Short: "Delete the given secret object",
 	Long:  "Delete the given secret object of",
 	Run: func(cmd *cobra.Command, args []string) {
-		api.SetSecretName(secretName)
-		api.DeleteSecret()
+		api.DeleteSecret(args)
 	},
 }
