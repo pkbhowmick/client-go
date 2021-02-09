@@ -39,3 +39,19 @@ func CreateHeadlessService() {
 	}
 	fmt.Printf("Service %q created\n", result.GetObjectMeta().GetName())
 }
+
+func DeleteService(args []string) {
+	if len(args) == 0 {
+		return
+	}
+	clientset := CreateClientSet()
+	svcClient := clientset.CoreV1().Services(apiv1.NamespaceDefault)
+	for _, svc := range args {
+		err := svcClient.Delete(context.TODO(), svc, metav1.DeleteOptions{})
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Printf("Service %q deleted\n", svc)
+	}
+}
