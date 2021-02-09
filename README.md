@@ -13,7 +13,7 @@ $ ./client-go version  # This command will print the version for successful inst
 
 ## Some example commands for StatefulSet
 ```shell
-$ ./client-go create-sts     # to run a stateful set of 3 replicas of mongo image 
+$ ./client-go create-sts     # to create a stateful set of 3 replicas of mongo image and a headless service associate with it
 $ ./client-go list-sts       # to get the list of stateful set object running on default namespace
 $ ./client-go update-sts --name=<stateful_set_name> --image=<image_name> --replicas=<number_of_replica>    # to update the statefulset object
 $ ./client-go delete-sts --name=<stateful_set_name>     # to delete the whole stateful set    
