@@ -25,35 +25,7 @@ func SetImage(img string) {
 }
 
 func CreateStatefulSet() {
-	fmt.Println("Creating Service ...")
 	clientset := CreateClientSet()
-	svcClient := clientset.CoreV1().Services(apiv1.NamespaceDefault)
-	service := &apiv1.Service{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: "mongo-service",
-			Labels: map[string]string{
-				"app": "mongodb",
-			},
-		},
-		Spec: apiv1.ServiceSpec{
-			Ports: []apiv1.ServicePort{
-				{
-					Port: 80,
-					Name: "web",
-				},
-			},
-			ClusterIP: apiv1.ClusterIPNone,
-			Selector: map[string]string{
-				"app": "mongodb",
-			},
-		},
-	}
-	result, err := svcClient.Create(context.TODO(), service, metav1.CreateOptions{})
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Printf("Service %q created\n", result.GetObjectMeta().GetName())
 	fmt.Println("Creating StatefulSet...")
 	stsClient := clientset.AppsV1().StatefulSets(apiv1.NamespaceDefault)
 	statefulSet := &appsv1.StatefulSet{
@@ -79,6 +51,26 @@ func CreateStatefulSet() {
 						{
 							Name:  "mongo",
 							Image: "mongo",
+							Env: []apiv1.EnvVar{
+								{
+									Name: "MONGO_INITDB_ROOT_USERNAME",
+									ValueFrom: &apiv1.EnvVarSource{
+										SecretKeyRef: &apiv1.SecretKeySelector{
+											LocalObjectReference: apiv1.LocalObjectReference{Name: "mongo-secret"},
+											Key:                  "username",
+										},
+									},
+								},
+								{
+									Name: "MONGO_INITDB_ROOT_PASSWORD",
+									ValueFrom: &apiv1.EnvVarSource{
+										SecretKeyRef: &apiv1.SecretKeySelector{
+											LocalObjectReference: apiv1.LocalObjectReference{Name: "mongo-secret"},
+											Key:                  "password",
+										},
+									},
+								},
+							},
 							Ports: []apiv1.ContainerPort{
 								{
 									Name:          "db-port",

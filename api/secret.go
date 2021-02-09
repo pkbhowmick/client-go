@@ -17,8 +17,8 @@ func CreateSecret() {
 		},
 		Type: apiv1.SecretTypeOpaque,
 		Data: map[string][]byte{
-			"username": []byte(`YWRtaW4=`),
-			"password": []byte(`YWRtaW4=`),
+			"username": []byte(`admin`),
+			"password": []byte(`admin`),
 		},
 	}
 	result, err := secretClient.Create(context.TODO(), secret, metav1.CreateOptions{})
