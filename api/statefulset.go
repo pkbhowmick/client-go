@@ -103,7 +103,7 @@ func CreateStatefulSet() {
 					},
 				},
 			},
-			ServiceName: "mongodb-service",
+			ServiceName: "mongo-service",
 		},
 	}
 
