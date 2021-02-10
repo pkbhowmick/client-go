@@ -13,7 +13,6 @@ func init() {
 	rootCmd.AddCommand(listStsCmd)
 	rootCmd.AddCommand(deleteStsCmd)
 	rootCmd.AddCommand(updateStsCmd)
-	deleteStsCmd.PersistentFlags().StringVarP(&stsName, "name", "n", "", "This flag sets StatefulSet name to be deleted")
 	updateStsCmd.PersistentFlags().StringVarP(&stsName, "name", "n", "", "This flag sets StatefulSet name to be updated")
 	updateStsCmd.PersistentFlags().Int32VarP(&replicas, "replicas", "r", 1, "This flag sets the number of replicas of the StatefulSet")
 	updateStsCmd.PersistentFlags().StringVarP(&image, "image", "i", "mongo", "This flag sets image name to be updated")
@@ -42,8 +41,7 @@ var deleteStsCmd = &cobra.Command{
 	Short: "Delete the given StatefulSet",
 	Long:  "delete-sts command deletes the given StatefulSet",
 	Run: func(cmd *cobra.Command, args []string) {
-		api.SetStsName(stsName)
-		api.DeleteStatefulSet()
+		api.DeleteStatefulSet(args)
 	},
 }
 

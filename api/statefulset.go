@@ -129,16 +129,20 @@ func ListStatefulSet() {
 	}
 }
 
-func DeleteStatefulSet() {
-	fmt.Printf("Deleteing StatefulSet: %q\n", stsName)
-	clientset := CreateClientSet()
-	stsClient := clientset.AppsV1().StatefulSets(apiv1.NamespaceDefault)
-	err := stsClient.Delete(context.TODO(), stsName, metav1.DeleteOptions{})
-	if err != nil {
-		fmt.Println(err)
+func DeleteStatefulSet(args []string) {
+	if len(args) == 0 {
 		return
 	}
-	fmt.Printf("%q successfully deleted\n", stsName)
+	clientset := CreateClientSet()
+	stsClient := clientset.AppsV1().StatefulSets(apiv1.NamespaceDefault)
+	for _, stsName := range args {
+		err := stsClient.Delete(context.TODO(), stsName, metav1.DeleteOptions{})
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Printf("%q successfully deleted\n", stsName)
+	}
 }
 
 func UpdateStatefulSet() {
